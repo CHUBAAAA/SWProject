@@ -94,10 +94,38 @@ exports.addBooking = async (req, res, next) => {
         //add user Id to req.body
         req.body.user = req.user.id;
 
-        //check for existed booking
-        const existedBooking = await Booking.find({user: req.user.id});
+        const { checkInDate, checkOutDate } = req.body;
 
-        //if the user is not an admin, they can only create 3 bookings
+        // Validate the check-in and check-out dates
+        if (!checkInDate || !checkOutDate) {
+            return res.status(400).json({
+                success: false,
+                message: "Check-in and Check-out dates are required"
+            });
+        }
+
+        const checkIn = new Date(checkInDate);
+        const checkOut = new Date(checkOutDate);
+
+        // Ensure check-out is after check-in
+        if (checkOut <= checkIn) {
+            return res.status(400).json({
+                success: false,
+                message: "Check-out date must be later than check-in date"
+            });
+        }
+
+        // Ensure no more than 3 nights
+        const duration = (checkOut - checkIn) / (1000 * 3600 * 24); // Convert milliseconds to days
+        if (duration > 3) {
+            return res.status(400).json({
+                success: false,
+                message: "Bookings can only be made for up to 3 nights."
+            });
+        }
+
+        // Check for existing bookings for the user
+        const existedBooking = await Booking.find({user: req.user.id});
         if (existedBooking.length >= 3 && req.user.role !== 'admin') {
             return res.status(400).json({
                 success: false,

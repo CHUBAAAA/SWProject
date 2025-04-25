@@ -23,7 +23,30 @@ exports.register = async (req,res,next) => {
         sendTokenResponse(user, 200, res);
 
     } catch (err) {
-        res.status(400).json({success: false});
+        // Check if the error is a validation error
+        if (err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map(val => val.message);
+            return res.status(400).json({
+                success: false,
+                error: messages
+            });
+        }
+
+        // Handle duplicate key errors
+        if (err.code === 11000) {
+            const field = Object.keys(err.keyValue)[0];
+            return res.status(400).json({
+                success: false,
+                error: `${field} already exists`
+            });
+        }
+
+        // Generic error handler
+        res.status(500).json({
+            success: false,
+            error: 'Server Error'
+        });
+
         console.log(err.stack);
     }
 }
@@ -37,13 +60,13 @@ exports.login = async (req, res, next) => {
 
     //Validate email & password
     if (!email || !password) {
-        return res.status(400).json({succes: false, msg: 'Please provide an email and password'});
+        return res.status(400).json({success: false, msg: 'Please provide an email and password'});
     }
 
     //Check for user
     const user = await User.findOne({email}).select('+password');
     if(!user) {
-        return res.status(400).json({succes: false, msg: 'Invalid credentials'});
+        return res.status(400).json({success: false, msg: 'Invalid credentials'});
     }
 
     //Check if password matches
