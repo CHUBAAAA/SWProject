@@ -1,0 +1,13 @@
+@startuml
+actor User
+participant "Booking Controller" as Booking
+participant "Booking Model" as DB
+participant "Auth Middleware" as Auth
+
+User -> Booking : POST /hotels/:hotelId/bookings (with token)
+Booking -> Auth : Validate token
+Auth --> Booking : User ID from token
+Booking -> DB : Validate & Create Booking (<= 3 nights)
+DB --> Booking : Booking created
+Booking --> User : 201 Created
+@enduml

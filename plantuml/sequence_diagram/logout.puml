@@ -1,0 +1,8 @@
+@startuml
+actor User
+participant "Auth Controller" as Auth
+
+User -> Auth : GET /logout
+Auth -> Auth : Clear token / session
+Auth --> User : 200 OK
+@enduml

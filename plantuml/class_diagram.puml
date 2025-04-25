@@ -1,0 +1,36 @@
+@startuml
+
+class User {
+  - name: String
+  - email: String
+  - tel: String
+  - password: String
+  - role: String
+  - createdAt: Date
+  + getSignedJwtToken(): String
+  + matchPassword(pw): Boolean
+}
+
+class Hotel {
+  - name: String
+  - address: String
+  - district: String
+  - province: String
+  - postalcode: String
+  - region: String
+  - tel: String
+  + bookings: Booking[*]
+}
+
+class Booking {
+  - checkInDate: Date
+  - checkOutDate: Date
+  - createdAt: Date
+  - user: User
+  - hotel: Hotel
+}
+
+User "1" -- "many" Booking : books >
+Hotel "1" -- "many" Booking : has >
+
+@enduml

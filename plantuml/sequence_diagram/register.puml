@@ -1,0 +1,10 @@
+@startuml
+actor User
+participant "Auth Controller" as Auth
+participant "User Model (MongoDB)" as DB
+
+User -> Auth : POST /register (name, email, tel, password)
+Auth -> DB : Validate + Create User
+DB --> Auth : User created
+Auth --> User : 201 Created + Token
+@enduml

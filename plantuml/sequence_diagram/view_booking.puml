@@ -1,0 +1,13 @@
+@startuml
+actor User
+participant "Booking Controller" as Booking
+participant "Booking Model" as DB
+participant "Auth Middleware" as Auth
+
+User -> Booking : GET /bookings (with token)
+Booking -> Auth : Validate token
+Auth --> Booking : User ID
+Booking -> DB : Find bookings by userId
+DB --> Booking : List of bookings
+Booking --> User : 200 OK + data
+@enduml

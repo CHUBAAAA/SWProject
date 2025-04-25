@@ -1,0 +1,11 @@
+@startuml
+actor Admin
+participant "Auth Controller" as Auth
+participant "User Model" as DB
+
+Admin -> Auth : POST /login
+Auth -> DB : Find user by email
+DB --> Auth : Return user + role
+Auth -> Auth : Compare password
+Auth --> Admin : 200 OK + Token
+@enduml

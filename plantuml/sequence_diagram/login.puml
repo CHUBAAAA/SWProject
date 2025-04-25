@@ -1,0 +1,11 @@
+@startuml
+actor User
+participant "Auth Controller" as Auth
+participant "User Model" as DB
+
+User -> Auth : POST /login (email, password)
+Auth -> DB : Find user by email
+DB --> Auth : Return user with hashed password
+Auth -> Auth : Compare password
+Auth --> User : 200 OK + Token
+@enduml

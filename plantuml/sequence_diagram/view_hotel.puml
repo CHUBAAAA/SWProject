@@ -1,0 +1,10 @@
+@startuml
+actor User
+participant "Hotel Controller" as Hotel
+participant "Hotel Model" as DB
+
+User -> Hotel : GET /hotels
+Hotel -> DB : Retrieve hotel list
+DB --> Hotel : List of hotels
+Hotel --> User : 200 OK + hotel data
+@enduml
