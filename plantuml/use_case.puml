@@ -1,0 +1,39 @@
+@startuml
+left to right direction
+actor User
+actor Admin
+
+package "Hotel Booking System" {
+    
+    (Register) as UC_Register
+    (Login) as UC_Login
+    (Logout) as UC_Logout
+
+    (View Hotels) as UC_ViewHotels
+
+    (Create Booking) as UC_CreateBooking
+    (View Own Booking) as UC_ViewOwnBooking
+    (Edit Own Booking) as UC_EditOwnBooking
+    (Delete Own Booking) as UC_DeleteOwnBooking
+
+    (View Any Booking) as UC_ViewAnyBooking
+    (Edit Any Booking) as UC_EditAnyBooking
+    (Delete Any Booking) as UC_DeleteAnyBooking
+
+    User --> UC_Register
+    User --> UC_Login
+    User --> UC_Logout
+    User --> UC_ViewHotels
+    User --> UC_CreateBooking
+    User --> UC_ViewOwnBooking
+    User --> UC_EditOwnBooking
+    User --> UC_DeleteOwnBooking
+
+    Admin --> UC_Login
+    Admin --> UC_Logout
+    Admin --> UC_ViewHotels
+    Admin --> UC_ViewAnyBooking
+    Admin --> UC_EditAnyBooking
+    Admin --> UC_DeleteAnyBooking
+}
+@enduml

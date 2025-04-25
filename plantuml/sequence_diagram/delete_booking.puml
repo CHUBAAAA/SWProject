@@ -1,0 +1,15 @@
+@startuml
+actor User
+participant "Booking Controller" as Booking
+participant "Booking Model" as DB
+participant "Auth Middleware" as Auth
+
+User -> Booking : DELETE /bookings/:id (with token)
+Booking -> Auth : Validate token
+Auth --> Booking : User ID
+Booking -> DB : Find booking by ID + check ownership
+DB --> Booking : Booking data
+Booking -> DB : Delete booking
+DB --> Booking : Deleted
+Booking --> User : 200 OK
+@enduml
